@@ -1,18 +1,69 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles.css">
     <title>PAUSE Flipbook</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        .flipbook { width: 100%; height: auto; }
+        .page { display: none; }
+        .page.active { display: block; }
+    </style>
 </head>
 <body>
-    <div id="flipbook">
-        <div class="page">Page 1 Content</div>
-        <div class="page">Page 2 Content</div>
-        <div class="page">Page 3 Content</div>
-        <!-- More pages as needed -->
+    <div class="flipbook">
+        <div class="page active">Page 1 Content...</div>
+        <div class="page">Page 2 Content...</div>
+        <div class="page">Page 3 Content...</div>
+        <div class="page">Page 4 Content...</div>
+        <div class="page">Page 5 Content...</div>
+        <div class="page">Page 6 Content...</div>
+        <div class="page">Page 7 Content...</div>
+        <div class="page">Page 8 Content...</div>
+        <div class="page">Page 9 Content...</div>
     </div>
-    <script src="script.js"></script>
+    <button id="prevBtn">Previous</button>
+    <button id="nextBtn">Next</button>
+    <form id="feedbackForm">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required>
+        <label for="comments">Comments:</label>
+        <textarea id="comments" name="comments" required></textarea>
+        <button type="submit">Submit</button>
+    </form>
+    <script>
+        let currentPage = 0;
+        const pages = document.querySelectorAll('.page');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const form = document.getElementById('feedbackForm');
+
+        function updatePage() {
+            pages.forEach((page, index) => {
+                page.classList.toggle('active', index === currentPage);
+            });
+        }
+
+        prevBtn.onclick = function() {
+            if (currentPage > 0) {
+                currentPage--;
+                updatePage();
+            }
+        };
+
+        nextBtn.onclick = function() {
+            if (currentPage < pages.length - 1) {
+                currentPage++;
+                updatePage();
+            }
+        };
+
+        form.onsubmit = function(event) {
+            event.preventDefault();
+            alert('Feedback submitted: ' + form.name.value + ', ' + form.comments.value);
+            form.reset();
+        };
+    </script>
 </body>
 </html>

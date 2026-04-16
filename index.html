@@ -648,7 +648,7 @@
     document.getElementById('prev-btn').disabled = current === 0;
     const nextBtn = document.getElementById('next-btn');
     nextBtn.disabled = current === total - 1;
-    nextBtn.textContent = current === total - 2 ? 'Finish' : 'Next';
+    nextBtn.textContent = current === total - 2 ? 'Next' : 'Next';
   }
 
   function changePage(dir) { goTo(current + dir); }

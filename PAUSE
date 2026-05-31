@@ -5,6 +5,25 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>PAUSE — Positive Discipline Flipbook</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+
+<form action="https://formspree.io/f/mzdwqabv" method="POST">
+
+  <input type="text" name="participant_name" placeholder="Your name: ">
+
+  <textarea name="one_thing_learned" placeholder="One thing I learned today..." required></textarea>
+
+  <input type="text" name="support_person" placeholder="One person I can call when struggling to PAUSE" required>
+
+  <textarea name="commit_moment" placeholder="I commit to trying PAUSE when..." required></textarea>
+
+  <!-- Hidden fields for facilitator tracking -->
+  <input type="hidden" name="session_location" value="Valenzuela City">
+  <input type="hidden" name="session_date" value="">
+
+  <button type="submit">Save My Commitment</button>
+
+</form>
+
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 

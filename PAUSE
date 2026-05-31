@@ -5,25 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>PAUSE — Positive Discipline Flipbook</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-
-<form action="https://formspree.io/f/mzdwqabv" method="POST">
-
-  <input type="text" name="participant_name" placeholder="Your name: ">
-
-  <textarea name="one_thing_learned" placeholder="One thing I learned today..." required></textarea>
-
-  <input type="text" name="support_person" placeholder="One person I can call when struggling to PAUSE" required>
-
-  <textarea name="commit_moment" placeholder="I commit to trying PAUSE when..." required></textarea>
-
-  <!-- Hidden fields for facilitator tracking -->
-  <input type="hidden" name="session_location" value="Valenzuela City">
-  <input type="hidden" name="session_date" value="">
-
-  <button type="submit">Save My Commitment</button>
-
-</form>
-
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -212,7 +193,7 @@
     font-style: italic;
   }
 
-  textarea, input[type="text"] {
+  textarea, input[type="text"], input[type="email"] {
     width: 100%;
     border: none;
     border-bottom: 1px solid var(--border);
@@ -303,7 +284,8 @@
   }
   .pilot-banner strong { font-weight: 500; display: block; margin-bottom: 2px; }
 
-  .export-btn {
+  /* Submit button */
+  .submit-btn {
     width: 100%;
     font-family: 'DM Sans', sans-serif;
     font-size: 13px;
@@ -318,7 +300,37 @@
     letter-spacing: 0.02em;
     transition: background 0.15s;
   }
-  .export-btn:hover { background: var(--teal-light); }
+  .submit-btn:hover { background: var(--teal-light); }
+  .submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  /* Success state */
+  .success-msg {
+    display: none;
+    background: var(--teal-light);
+    border: 1px solid rgba(15,110,86,0.2);
+    border-radius: 10px;
+    padding: 1rem 1.125rem;
+    margin-top: 1rem;
+    font-size: 13px;
+    color: var(--teal);
+    line-height: 1.6;
+    text-align: center;
+  }
+  .success-msg.visible { display: block; }
+
+  /* Error state */
+  .error-msg {
+    display: none;
+    background: var(--coral-light);
+    border: 1px solid rgba(153,60,29,0.15);
+    border-radius: 10px;
+    padding: 0.75rem 1rem;
+    margin-top: 0.75rem;
+    font-size: 12px;
+    color: var(--coral);
+    line-height: 1.6;
+  }
+  .error-msg.visible { display: block; }
 
   .accent-line {
     width: 28px;
@@ -330,7 +342,7 @@
   /* Print styles */
   @media print {
     body { background: white; padding: 0; }
-    .nav, .top-label, .export-btn, .pilot-banner { display: none !important; }
+    .nav, .top-label, .submit-btn, .pilot-banner { display: none !important; }
     .page { display: flex !important; box-shadow: none; border: none; page-break-after: always; min-height: 100vh; }
   }
 </style>
@@ -358,7 +370,40 @@
     </div>
   </div>
 
-  <!-- Page 1: Reflection opener -->
+  <!-- Page 1: Safeguarding Commitment -->
+  <div id="page-1" class="page">
+    <div>
+      <div class="page-label">Before we begin</div>
+      <div class="progress-bar"><div class="progress-fill" style="width:11%"></div></div>
+      <div style="font-family:'DM Serif Display',serif;font-size:22px;margin-bottom:1rem;color:var(--ink);">Our commitment to safety</div>
+      <div style="font-size:13px;line-height:1.75;color:var(--ink2);margin-bottom:1.25rem;">
+        PAUSE is a safe space. Everything shared in this session stays within this group. No one will be judged for what they share or what they have experienced.
+      </div>
+
+      <div class="scenario-box" style="margin-bottom:1rem;">
+        <div class="scenario-label">If something difficult comes up</div>
+        If anything shared during this session raises a concern about a child's safety — including your own child — your facilitator is here to help connect you with the right support. You will never be alone in that moment.
+      </div>
+
+      <div class="scenario-box" style="margin-bottom:1rem;background:var(--p-light);">
+        <div class="scenario-label" style="color:var(--p);">Child protection hotline</div>
+        <div style="color:var(--p);font-size:13px;line-height:1.65;">
+          Philippines: <strong>1343</strong> — DSWD Action Center<br>
+          Vietnam: <strong>111</strong> — National Child Protection Hotline<br>
+          Cambodia: <strong>1280</strong> — Child Helpline
+        </div>
+      </div>
+
+      <div style="font-size:12px;line-height:1.7;color:var(--ink3);">
+        This toolkit follows the Save the Children Child Safeguarding Policy. Every facilitator has been briefed on do-no-harm principles and in-country referral pathways before running this session.
+      </div>
+    </div>
+    <div style="font-size:11px;color:var(--ink3);margin-top:1rem;line-height:1.6;">
+      Violence Ends With Us · Asia-Pacific 2026
+    </div>
+  </div>
+
+  <!-- Page 2: Reflection opener -->
   <div id="page-1" class="page">
     <div>
       <div class="page-label">Before we start</div>
@@ -458,7 +503,7 @@
     </div>
   </div>
 
-  <!-- Page 7: Commitment + Pilot Data -->
+  <!-- Page 7: Commitment + Formspree Form -->
   <div id="page-7" class="page">
     <div>
       <div class="page-label">Your commitment</div>
@@ -466,73 +511,63 @@
       <div class="reflection-q">Is that the memory you want your child to have of you?</div>
       <div class="reflection-sub">You don't have to be perfect. You just have to pause — one moment at a time.</div>
 
-      <div class="pilot-banner">
-        <strong>Facilitator note</strong>
-        Ask participants to fill in the fields below. Collect this page after the session — it becomes your pilot evidence.
-      </div>
 
-      <div class="field-group">
-        <label class="field-label">One thing I learned today</label>
-        <textarea id="learned" rows="2" placeholder="Write freely..."></textarea>
-      </div>
-      <div class="field-group">
-        <label class="field-label">One person I can call when I'm struggling to pause</label>
-        <input id="support-person" type="text" placeholder="Their name" />
-      </div>
-      <div class="field-group">
-        <label class="field-label">I commit to trying PAUSE when...</label>
-        <textarea id="commit" rows="2" placeholder="Describe your moment..."></textarea>
-      </div>
 
-      <div class="commit-box">
-        <div class="commit-title">P · A · U · S · E</div>
-        <div class="commit-steps">
-          Pause · Ask · Understand · Support · Encourage<br>
-          Violence ends with us.
-        </div>
-      </div>
-    </div>
-    <button class="export-btn" onclick="exportData()">Save my responses as text</button>
-  </div>
+      <!-- Formspree Form -->
+      <form id="pause-form">
 
-  <!-- Page 8: Facilitator guide -->
-  <div id="page-8" class="page">
-    <div>
-      <div class="page-label">For facilitators</div>
-      <div style="font-family:'DM Serif Display',serif;font-size:22px;margin-bottom:1.25rem;color:var(--ink);">How to run a PAUSE session</div>
-
-      <div style="font-size:13px;line-height:1.75;color:var(--ink2);">
-
-        <div style="margin-bottom:1.25rem;">
-          <div style="font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.08em;color:var(--ink3);margin-bottom:0.4rem;">Before the session</div>
-          Print one flipbook per participant, or share this link on a shared screen. Prepare blank paper for offline reflections if needed.
+        <div class="field-group">
+          <label class="field-label" for="participant_name">Your name (optional)</label>
+          <input type="text" id="participant_name" name="participant_name" placeholder="First name or leave blank" />
         </div>
 
-        <div style="margin-bottom:1.25rem;">
-          <div style="font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.08em;color:var(--ink3);margin-bottom:0.4rem;">What to collect for your pilot report</div>
-          After the session, gather the commitment pages. You are looking for:<br><br>
-          · Total participants who completed the flipbook<br>
-          · % who named a support person<br>
-          · % who wrote a specific commit-to moment<br>
-          · Notable quotes from "one thing I learned"<br>
-          · Your own observation: how did the group respond?
+        <div class="field-group">
+          <label class="field-label" for="learned">One thing I learned today</label>
+          <textarea id="learned" name="learned" rows="2" placeholder="Write freely..." required></textarea>
+          <span data-fs-error="learned" style="font-size:11px;color:var(--coral);"></span>
         </div>
 
-        <div style="margin-bottom:1.25rem;">
-          <div style="font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.08em;color:var(--ink3);margin-bottom:0.4rem;">Follow-up (2–4 weeks later)</div>
-          Ask one question: "Did you use PAUSE at least once since our session?" Yes / No / Not yet but I tried. That single data point across 10+ participants is your behavior change evidence.
+        <div class="field-group">
+          <label class="field-label" for="support_person">One person I can call when I'm struggling to pause</label>
+          <input type="text" id="support_person" name="support_person" placeholder="Their name" required />
+          <span data-fs-error="support_person" style="font-size:11px;color:var(--coral);"></span>
         </div>
 
-        <div>
-          <div style="font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.08em;color:var(--ink3);margin-bottom:0.4rem;">Bring this to the table</div>
-          Printed commitment pages + follow-up responses = the proof that PAUSE works in real communities. This is what you bring to the 2nd Global Ministerial Conference in November 2026.
+        <div class="field-group">
+          <label class="field-label" for="commit_moment">I commit to trying PAUSE when...</label>
+          <textarea id="commit_moment" name="commit_moment" rows="2" placeholder="Describe your moment..." required></textarea>
+          <span data-fs-error="commit_moment" style="font-size:11px;color:var(--coral);"></span>
         </div>
-      </div>
-    </div>
-    <div style="font-size:11px;color:var(--ink3);margin-top:1rem;line-height:1.6;">
-      Part of the Violence Ends With Us Youth Summit · Asia-Pacific 2026
+
+        <!-- Hidden fields for facilitator tracking -->
+        <input type="hidden" name="session_location" value="Valenzuela City, Philippines" />
+        <input type="hidden" name="toolkit_version" value="Pilot Edition · Asia-Pacific 2026" />
+
+        <div class="commit-box">
+          <div class="commit-title">P · A · U · S · E</div>
+          <div class="commit-steps">
+            Pause · Ask · Understand · Support · Encourage<br>
+            Violence ends with us.
+          </div>
+        </div>
+
+        <!-- Error message -->
+        <div class="error-msg" id="form-error">
+          Something went wrong. Please try again or check your connection.
+        </div>
+
+        <!-- Success message (shown after submit) -->
+        <div class="success-msg" id="form-success">
+          ✓ Your commitment has been saved. Thank you for choosing to pause. Violence ends with us.
+        </div>
+
+        <button type="submit" class="submit-btn" id="submit-btn">Save my commitment</button>
+
+      </form>
     </div>
   </div>
+
+
 
   <!-- Navigation -->
   <div class="nav">
@@ -544,6 +579,7 @@
 </div>
 
 <script>
+  // ── Flipbook navigation ──────────────────────────────────────────
   let current = 0;
   const total = 9;
 
@@ -569,35 +605,51 @@
 
   function changePage(dir) { goTo(current + dir); }
 
-  function exportData() {
-    const learned = document.getElementById('learned').value || '(not filled)';
-    const person = document.getElementById('support-person').value || '(not filled)';
-    const commit = document.getElementById('commit').value || '(not filled)';
-    const now = new Date().toLocaleDateString('en-PH', { year: 'numeric', month: 'long', day: 'numeric' });
+  // ── Formspree Ajax submission ────────────────────────────────────
+  const form = document.getElementById('pause-form');
+  const submitBtn = document.getElementById('submit-btn');
+  const successMsg = document.getElementById('form-success');
+  const errorMsg = document.getElementById('form-error');
 
-    const text = `PAUSE SESSION RESPONSE
-Date: ${now}
+  form.addEventListener('submit', async function (e) {
+    e.preventDefault();
 
-One thing I learned today:
-${learned}
+    // Reset messages
+    successMsg.classList.remove('visible');
+    errorMsg.classList.remove('visible');
 
-One person I can call when I'm struggling to pause:
-${person}
+    // Disable button while submitting
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Saving...';
 
-I commit to trying PAUSE when:
-${commit}
+    const data = new FormData(form);
 
----
-Violence Ends With Us · PAUSE Toolkit · Asia-Pacific 2026
-`;
-    const blob = new Blob([text], { type: 'text/plain' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'PAUSE_response_' + Date.now() + '.txt';
-    a.click();
-    URL.revokeObjectURL(url);
-  }
+    try {
+      const response = await fetch('https://formspree.io/f/mzdwqabv', {
+        method: 'POST',
+        body: data,
+        headers: { 'Accept': 'application/json' }
+      });
+
+      if (response.ok) {
+        // Show success
+        successMsg.classList.add('visible');
+        submitBtn.style.display = 'none';
+        // Clear form fields
+        form.querySelectorAll('textarea, input[type="text"]').forEach(el => el.value = '');
+      } else {
+        // Show error
+        errorMsg.classList.add('visible');
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Save my commitment';
+      }
+    } catch (err) {
+      // Network error
+      errorMsg.classList.add('visible');
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Save my commitment';
+    }
+  });
 </script>
 </body>
 </html>
